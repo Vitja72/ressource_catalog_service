@@ -4,7 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -20,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/Vitja72/ressource_catalog_service/issues"
   },
-  "homepage": "https://github.com/Vitja72/ressource_catalog_service#readme"
+  "homepage": "https://github.com/Vitja72/ressource_catalog_service#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
 }
