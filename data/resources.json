@@ -1,16 +1,22 @@
 [
-    {
-        "id": "1",
-        "title": "Einführung in die Webentwicklung",
-        "type": "Kurs",
-        "authorId": "a1b2c3d4",
-        "url": "http://example.com/webdev"
-    },
-    {
-        "id": "2",
-        "title": "Express.js-Tutorial",
-        "type": "Video",
-        "authorId": "a1b2c3d4",
-        "url": "http://example.com/expressjs"
-    }
+  {
+    "id": "2",
+    "title": "Express.js-Tutorial",
+    "type": "Video",
+    "authorId": "a1b2c3d4",
+    "url": "http://example.com/expressjs",
+    "description": "In diesem Kurs lernt man die Grundlagen der Webentwicklung."
+  },
+  {
+    "id": "c97239bb-d7a5-4402-8d03-5f68afcc4efd",
+    "title": "Express.js-Tutorial",
+    "type": "Video",
+    "url": "http://example.com/expressjs"
+  },
+  {
+    "id": "60341836-d3ac-43e7-8ce3-209727c962c6",
+    "title": "Express.js-Tutorial",
+    "type": "Video",
+    "url": "http://example.com/expressjs"
+  }
 ]

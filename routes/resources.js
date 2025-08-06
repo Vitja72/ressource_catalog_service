@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 });
 
 
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res, next) => {
     try {
         const resourceId = req.params.id;
         const data = readFileSync(data_file, 'utf8');
@@ -37,12 +37,12 @@ router.get('/:id', (req, res) => {
         }
 
     } catch (error) {
-        res.status(500).json({ error: 'Interner Serverfehler beim Laden der Ressourcen-Daten.' });
+    next(error); 
     }
 });
 
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
     const newData = req.body;
 
     if (!newData.title || !newData.type) {
@@ -68,13 +68,13 @@ router.post('/', (req, res) => {
         // 5. Antwort schicken.
         res.status(201).json(newResource);
     } catch (error) {
-        res.status(500).json({ error: 'Interner Serverfehler bei der Verarbeitung der Ressourcen-Daten.' });
+        next(error); 
     }
 
 });
 
 
-router.put('/:id', (req, res) => {
+router.put('/:id', (req, res, next) => {
     // 1. ID auslesen
     const resourceId = req.params.id;
     const newData = req.body; 
@@ -108,15 +108,14 @@ router.put('/:id', (req, res) => {
         res.status(200).json(resources[resourceIndex]);
 
     } catch(error) {
-        res.status(500).json({ error: 'Interner Serverfehler bei der Verarbeitung der Ressourcen-Daten.' });
-    };
+        next(error); 
+    }
+}); 
 
-    router.delete('/id', (req, res) => {
+    router.delete('/:id', (req, res, next) => {
         const resourceId = req.params.id;
-        const newData = req.body;
-
-    }); 
-            try {
+           
+        try {
         
         const data = readFileSync(data_file, 'utf8');
         const resources = JSON.parse(data);
@@ -127,16 +126,14 @@ router.put('/:id', (req, res) => {
             res.status(404).json({ error: `Ressource mit ID ${resourceId} nicht gefunden.`});
             return;
         }
-        
-        resources[resourceIndex] = {...resources[resourceIndex], ...newData};
-      
+                     
         resources.splice(resourceIndex, 1);
         writeFileSync(data_file, JSON.stringify(resources, null, 2), 'utf8');
 
         res.status(204).json({error: 'No Content'});
 
     } catch(error) {
-        res.status(500).json({ error: 'Interner Serverfehler bei der Verarbeitung der Ressourcen-Daten.' })
+        next(error); 
 
     };
 
