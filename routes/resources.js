@@ -21,16 +21,16 @@ router.get('/', (req, res, next) => {
         const { type, authorId } = req.query;
 
         if (type) {
-            resources = resources.filter(r => r.type.toLowerCase() === type.toLowerCase());
+            resources = resources.filter(r => r.type === type);
 
         if (authorId) {
             resources = resources.filter(r => r.authorId === authorId);
         }; 
+        
+        }
 
         res.json(resources);
-
-        };
-
+        
     } catch (error) {
         next(error);
     }
