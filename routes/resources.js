@@ -3,6 +3,8 @@ import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
+import { validateResource } from '../middleware/validation.js';
+
 
 const router = express.Router();
 
@@ -12,13 +14,25 @@ const __dirname = path.dirname(__filename);
 const data_file = path.join(__dirname, '../data', 'resources.json');
 
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     try {
         const data = readFileSync(data_file, 'utf8');
-        const resources = JSON.parse(data);
+        let resources = JSON.parse(data);
+        const { type, authorId } = req.query;
+
+        if (type) {
+            resources = resources.filter(r => r.type.toLowerCase() === type.toLowerCase());
+
+        if (authorId) {
+            resources = resources.filter(r => r.authorId === authorId);
+        }; 
+
         res.json(resources);
+
+        };
+
     } catch (error) {
-        res.status(500).json({ error: 'Interner Serverfehler beim Laden der Ressourcen-Daten.' });
+        next(error);
     }
 });
 
@@ -42,20 +56,17 @@ router.get('/:id', (req, res, next) => {
 });
 
 
-router.post('/', (req, res, next) => {
-    const newData = req.body;
+router.post('/', validateResource, (req, res, next) => {
+    const newResourceData = req.body;
 
-    if (!newData.title || !newData.type) {
-        res.status(400).json({ error: 'title und type sind erforderlich.' });
-        return;
-    }
+
 
     // 1. Neues Resource Objekt
 
     const newResource = {
         id: uuidv4(),
-        ...newData
-    }
+        ...newResourceData
+    };
 
     try {
         // 2. Vorhandene Daten aus der Datei lesen und in einem Array speichern.

@@ -18,5 +18,17 @@
     "title": "Express.js-Tutorial",
     "type": "Video",
     "url": "http://example.com/expressjs"
+  },
+  {
+    "id": "b77090ff-63fd-47dd-8add-dbacef4592fa",
+    "title": "Einführung in die Webentwicklung",
+    "type": "Kurs",
+    "url": "http://example.com/webdev"
+  },
+  {
+    "id": "a18c0a13-8486-4708-892b-cf6c7ffa70dd",
+    "title": "Express.js-Tutorial",
+    "type": "Video",
+    "url": "http://example.com/expressjs"
   }
 ]
