@@ -12,6 +12,7 @@ const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const data_file = path.join(__dirname, '../data', 'resources.json');
+const FEEDBACK_FILE = path.join(__dirname, '../data', 'feedback.json');
 
 
 router.get('/', (req, res, next) => {
@@ -29,7 +30,7 @@ router.get('/', (req, res, next) => {
         
         }
 
-        res.json(resources);
+                            
         
     } catch (error) {
         next(error);
@@ -80,6 +81,36 @@ router.post('/', validateResource, (req, res, next) => {
         res.status(201).json(newResource);
     } catch (error) {
         next(error); 
+    }
+
+});
+
+router.post('/:resourcesId/feedback', (req, res, next) => {
+    const resourcesId = req.params.resourcesId;
+    const { feedbackText, userId } = req.body;
+
+    if (!feedbackText || feedbackText.trim().length < 10 || feedbackText.trim().length > 500) {
+        return res.status(400).json({ error: 'Feedback-Text muss zwischen 10 und 500 Zeichen lang sein. '});
+    }
+    const newFeedback = {
+        id: uuidv4(), 
+        resourceId: resourcesId,
+        feedbackText: feedbackText.trim(),
+        userId: userId || 'anonymous',
+        timestamp: new Date().toISOString(),
+    };
+
+    try {
+        const data = readFileSync(FEEDBACK_FILE, 'utf-8');
+        const feedback = JSON.parse(data);
+        feedback.push(newFeedback);
+        const newFeedbackData = JSON.stringify(feedback, null, 2);
+        writeFileSync(FEEDBACK_FILE, newFeedbackData, 'utf-8');
+        res.status(201).json(newFeedback);
+    } catch (error) {
+        console.error('Fehler beim Schreiben des Feedbacks in die Datei:', error);
+        next(error);
+
     }
 
 });
