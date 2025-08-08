@@ -115,6 +115,39 @@ router.post('/:resourcesId/feedback', (req, res, next) => {
 
 });
 
+router.put('/:resourcesId/feedback/:feedbackId', (req, res, next) => {
+    const resourceId = req.params.resourcesId;
+    const feedbackId = req.params.feedbackId;
+    const { feedbackText } = req.body;
+
+    if (!feedbackText || feedbackText.trim().length < 10 || feedbackText.trim > 500) {
+        return res.status(400).json({ error: 'Aktuallisierter Feedback-Text muss zwischen 10 un 500 Zeichen lang sei. '})
+    };
+    try {
+        const data = readFileSync(FEEDBACK_FILE, 'utf-8');
+        let feedback = JSON.parse(data);
+        const feedbackIndex = feedback.findIndex(f => f.id === feedbackId && f.resourceId ===resourceId);
+
+        if (feedbackIndex === -1) {
+            return res.status(404).json({ error: `Feedback mit ID ${feedbackId} für Ressource ${resourceId} nicht gefunden.`})
+        };
+        feedback[feedbackIndex] = {
+            ...feedback[feedbackIndex],
+            feedbackText: feedbackText.trim(),
+            timestamp: new Date().toISOString()
+        
+        };
+        const newFeedbackData = JSON.stringify(feedback, null, 2);
+        writeFileSync(FEEDBACK_FILE, newFeedbackData, 'utf-8');
+        res.status(200).json(feedback[feedbackIndex]);
+
+    } catch (error) {
+        console.error('Fehler beim Aktuallisieren des Feedbacks:', error);
+        next(error);
+
+    };
+});
+
 
 router.put('/:id', (req, res, next) => {
     // 1. ID auslesen
