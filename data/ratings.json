@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "id": "bee8d67e-0c5e-4fb0-9198-e654822f0030",
+    "resourceId": "1",
+    "ratingValue": 5,
+    "userId": "user_abc",
+    "timestamp": "2025-08-08T10:11:46.850Z"
+  },
+  {
+    "id": "597cf357-7baf-4c97-b102-c6c3a7cfcefb",
+    "resourceId": "2",
+    "ratingValue": 3,
+    "userId": "user_xyz",
+    "timestamp": "2025-08-08T10:12:05.995Z"
+  }
+]
